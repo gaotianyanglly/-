@@ -257,7 +257,7 @@
 
 ## nextTick原理
 
-- 内部实现是用的promise实现，如果没用用的是settimeout
+- 内部实现是用的promise实现，如果没有用MutationObserver，在没有用的是settimeout 参考事件循环几种任务队列
 
 ## 父子组件生命周期执行顺序
 - 加载渲染阶段：在这个阶段，父组件的生命周期钩子会先于子组件执行。具体顺序为：父组件的beforeCreate、created、beforeMount，然后是子组件的beforeCreate、created、beforeMount，最后是子组件的mounted。这意味着，在子组件挂载到父组件之前，父组件已经完成了所有的生命周期钩子的执行。
