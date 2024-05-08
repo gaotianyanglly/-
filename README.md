@@ -241,10 +241,13 @@
 
 ## 前端优化
 
-- webpack可视化工具看各个模块的体积
+- webpack可视化工具（webpack-bundle-analyzer）看各个模块的体积
+    - https://b23.tv/GjDa3J6
 - lodash -> lodash-es
     - https://blog.csdn.net/qq_39335404/article/details/129951010
 - 移动端预加载
+- 表单细节优化
+    - https://b23.tv/DxhW7UI
 
 ## 涉及到图形的库 包体积过大 如何解决
 
