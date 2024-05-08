@@ -191,6 +191,24 @@
 - http：range 部分请求 可用于下载文件断点续传
     - https://blog.csdn.net/m0_62617719/article/details/128324865
 
+## 如何判断一个文件的类型经过非法修改
+- 在JavaScript中，可以通过读取文件的二进制数据并利用FileReader对象的readAsArrayBuffer方法来读取文件头部信息，然后根据文件类型的魔数（magic number）进行判断。
+    - "D0CF11E0A1B11AE1": "application/wps-office.ppt",
+    - "89504E470D0A1A0A": "image/png",
+  - "6674797071742020": "video/quicktime",
+  - "504B030414000600": "application/wps-office.xlsx",
+  - "504B03040A000000": "application/wps-office.docx",
+  - "3C68746D6C3E0A0A": "text/html",
+  - "3C21646F63747970": "text/html",
+  - "526172211A0700":   "application/vnd.rar",
+  - "7F454C46":         "application/x-sharedlib", 
+  - "504B0304":         "application/zip",
+  - "464C5601":         "video/x-flv",
+  - "3C737667":         "image/svg+xml",
+  - "25504446":         "application/pdf",
+  - "1A45DFA3":         "video/webm",
+  - "FFD8":             "image/jpeg", // (.jpg, .jpeg, .jfif, .pjpeg, .pjp)
+  - "4D5A":             "application/x-ms-dos-executable",
 
 ## docker
 
@@ -208,7 +226,7 @@
 
 
 ## 设计模式
-
+- BV1KJ4m1V7zC
 - 工厂模式
     - 比如各种提示框
 - 单例模式
