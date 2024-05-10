@@ -386,19 +386,20 @@
     - 只有根属性只读：shallowReadonly，第二层数据依然是非响应式，但可以更改
 - computed() 与vue2使用方式类似，语法发生变化
     - 有缓存，大致原理是有一个dirty（脏数据名称的由来）字段用于标识dep中该字段是否发生了变化，computed计算属性时如果该字段为true，则使用最新数据，计算完成后将dirty字段改为false，否则则使用缓存数据进行计算，这样的好处是当同一个computed字段在页面内多次被调用时，只会进行一次计算，也就只会触发一次所需响应式数据的getter方法，优化性能
-    -   ``` js <script setup>
-        const content = ref('测试文本')
-        const textLng = computed(() => {
-            conso.log('computed')
-            return content.value.length
-        })
-        <template>
-            {{textLng}}
-            {{textLng}}
-            {{textLng}}
-        </template>
-    </script>
-    
+    -   ``` js 
+            <script setup>
+                const content = ref('测试文本')
+                const textLng = computed(() => {
+                    conso.log('computed')
+                    return content.value.length
+                })
+                <template>
+                    {{textLng}}
+                    {{textLng}}
+                    {{textLng}}
+                </template>
+            </script>
+        ```
     调用三次但只有第一次时数据发生了变化会进行计算，否则使用缓存数据，因此只会打印一次（机制原理与vue2相同）
     - 可写计算属性
     ```js 
