@@ -261,11 +261,6 @@
 
 - vite是基于ESModules实现的，更加轻量，开发环境下打包速度更快，webpage是全量打包，因此比较慢
 
-## vue3和vue2的对比
-
-- 响应式 defineProps 和 proxy
-- diff算法更新 静态节点提升
-
 ## map和对象的区别
 - 
 
@@ -332,7 +327,7 @@
 - Viwe dispatch 到 Action，commit 到 Mutations， Mutate 到 State，最终 Rander 到 Viwe
 - 最简单或者说最常用的修改vuex状态的方式是直接在组件中commit一次更改到Mutations
 - Action中常封装一些页面的公共逻辑
-- 本质上是通过再生成一个响应式数据来实现的（vue2：new Vue（）/vue3：reactive（）），因此命名不能重复，2.6版本以上有一个更轻量级的方案：vue.observeable
+- 本质上是通过再生成一个响应式数据来实现的（vue2：`new Vue()`/vue3：`reactive()`），因此命名不能重复，2.6版本以上有一个更轻量级的方案：vue.observeable
 
 ## vuex的五个属性/方法
 - https://blog.csdn.net/qq_44755705/article/details/105291699
@@ -359,3 +354,147 @@
         - 详情原理参考 [父子组件生命周期执行顺序](#父子组件生命周期执行顺序)
         - https://www.php.cn/faq/382432.html
         - https://www.jb51.net/article/264928.htm
+
+## vue3 相比 vue2 新增的功能或者不同点
+- 响应式 defineProps 和 proxy
+- diff算法更新 静态节点提升
+- 组合式API（Composition）
+    - 
+    ```js
+    <script setup></script> 
+    ```
+    内即可使用组合式API，内部的import引用自动成位当前组件的子组件，相当于
+    ```js
+    <script>setup(){}</script>
+    ```
+
+    - 使用函数而不是生命选项的方式书写vue组件
+    - 好处：代码可读性、可维护性更好：选项式(Option)API无论逻辑代码，位置很可能会分散在多个位置，组合式API的代码组织更加自由，有利于维护，相比选项式API，代码结构更接近于原生js
+- 创建实例：`const app = createApp(App)`
+- 组件根标签可以有多个
+- reactive() 声明一个响应式数据，参数是对象
+    - 需要注意，vue3中很多函数都需要在用之前从vue中引入(如ref、computed、reactive等等)
+    - 一维数据、多维数据都可以
+    - 如果只希望只有第一层数据是响应式的，vue3还提供了shallowReactive的API
+- ref() 声明一个基础数据类型的响应式
+    - 不需要额外引入
+    - 原理是ref会自动生成一个空对象，并将参数赋值给该对象的value字段，所以用ref声明响应式数据后操作的是.value，这样做的原因是原生js无法监听基础数据类型的getter、setter，因此可以利用创建一个空对象然后监听他的value字段从而实现响应式
+- readonlay() 只读字段不允许更改，因此不需要做响应式处理
+    - 只有根属性只读：shallowReadonly，第二层数据依然是非响应式，但可以更改
+- computed() 与vue2使用方式类似，语法发生变化
+    - 有缓存，大致原理是有一个dirty（脏数据名称的由来）字段用于标识dep中该字段是否发生了变化，computed计算属性时如果该字段为true，则使用最新数据，计算完成后将dirty字段改为false，否则则使用缓存数据进行计算，这样的好处是当同一个computed字段在页面内多次被调用时，只会进行一次计算，也就只会触发一次所需响应式数据的getter方法，优化性能
+    -   ``` js <script setup>
+        const content = ref('测试文本')
+        const textLng = computed(() => {
+            conso.log('computed')
+            return content.value.length
+        })
+        <template>
+            {{textLng}}
+            {{textLng}}
+            {{textLng}}
+        </template>
+    </script>
+    
+    调用三次但只有第一次时数据发生了变化会进行计算，否则使用缓存数据，因此只会打印一次（机制原理与vue2相同）
+    - 可写计算属性
+    ```js 
+    <script>
+    import { ref, computed } from 'vue'
+
+    const firstName = ref('John')
+    const lastName = ref('Doe')
+
+    const fullName = computed({
+        // getter
+        get() {
+            return firstName.value + ' ' + lastName.value
+        },
+        // setter
+        set(newValue) {
+            // 注意：我们这里使用的是解构赋值语法
+            [firstName.value, lastName.value] = newValue.split(' ')
+        }
+    }) 
+    </script>
+    ```
+    - 要注意，使用可写计算属性时，不要改变其他状态、在 getter 中做异步请求或者更改 DOM！计算属性本身也尽量不要直接修改，仅用来读取计算属性
+- watch() 监听器
+    - 监听ref值：
+    ```js
+    const content = ref('测试文本')
+    watch(content, (newVal, oldVal) => {
+        console.log(newVal)
+    })
+    ```
+    - 監聽reactive中的某個字段时，需要以函数的形式return：
+    ```js
+    const myData = shallowReactive({
+        name: '张三',
+        age: 18,
+        friends: ['李雷']
+    })
+    watch(()=>myData.age, (newVal, oldVal) => {
+        console.log(newVal)
+    })
+    ```
+- watchEffect()
+    - https://cn.vuejs.org/api/reactivity-core.html#watcheffect
+    - 简单使用：
+    ```js
+        watchEffect(()=>{
+            console.log('watchEffect:' + content.value)
+            console.log('watchEffect:' + myData.age)
+        })
+    ```
+    函数中用到了哪些响应式数据就会监听哪些响应式数据，并且立即执行一次（immediate）
+- watch()和watchEffect()配置中都有flush字段用来指明是否访问更新后的DOM（`post`异步监听器和`sync`同步监听器）
+    ```js
+        watch(source, callback, {
+            flush: 'post'
+        })
+
+        watchEffect(callback, {
+            flush: 'post'
+        })
+        watch(source, callback, {
+            flush: 'sync'
+        })
+
+        watchEffect(callback, {
+            flush: 'sync'
+        })
+    ```
+    - vue3还提供了watchPostEffect和watchSyncEffect方法，与上述两种watchEffect相同
+    - 同步侦听器不会进行批处理，每当检测到响应式数据发生变化时就会触发。可以使用它来监视简单的布尔值，但应避免在可能多次同步修改的数据源 (如数组) 上使用。
+    - watchEffect的返回值为该侦听器的停止方法，大部分情况下在`setup()`或者`<script setup>`中以同步的形式创建的侦听器是不需要特别关心何时停止的，因为这样创建的侦听器会绑定在宿主组件上，组件卸载时就会自动停止，但当在异步回调中创建一个侦听器时，它不会绑定在当前组件上，必须手动停止以防内存泄漏
+    ```js
+        <script setup>
+        import { watchEffect } from 'vue'
+
+        // 它会自动停止
+        watchEffect(() => {})
+
+        // ...这个则不会！
+        setTimeout(() => {
+            watchEffect(() => {})
+        }, 100)
+        </script>
+
+        // 手动停止
+        const unwatch = watchEffect(() => {})
+
+        // ...当该侦听器不再需要时
+        unwatch()
+    ```
+    尽可能同步创建侦听器，如果是处理异步请求的数据可以利用if
+    ```js
+     // 需要异步请求得到的数据
+        const data = ref(null)
+
+        watchEffect(() => {
+            if (data.value) {
+                // 数据加载后执行某些操作...
+            }
+        })   
+    ```
