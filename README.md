@@ -259,7 +259,7 @@
 
 ## vite和webpage
 
-- vite是基于ESModules实现的，更加轻量，开发环境下打包速度更快，webpage是全量打包，因此比较慢
+- vite是基于ESModules实现的，更加轻量，开发环境下打包速度更快（简单来说访问什么模块才加载什么模块），webpage是全量打包（加载完所有模块后才完成打包），因此比较慢
 
 ## map和对象的区别
 - 
@@ -368,8 +368,11 @@
     <script>setup(){}</script>
     ```
 
-    - 使用函数而不是生命选项的方式书写vue组件
+    - 使用函数而不是声明选项的方式书写vue组件
     - 好处：代码可读性、可维护性更好：选项式(Option)API无论逻辑代码，位置很可能会分散在多个位置，组合式API的代码组织更加自由，有利于维护，相比选项式API，代码结构更接近于原生js
+    - `setup(){}`中`this`是`undefined`，vue3中已经弱化`this`了
+    - `setup()`的运行时机：beforeCreate之前（什么时候初始化data？created之前，beforeCreate之后，因此data中可以取到setup中的数据，反之则不能）
+    - setup的返回值也可以是个render函数
 - 创建实例：`const app = createApp(App)`
 - 组件根标签可以有多个
 - reactive() 声明一个响应式数据，参数是对象
