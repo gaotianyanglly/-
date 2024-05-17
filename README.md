@@ -522,3 +522,21 @@
 想要以key value的形式存储数组有哪些方法
 map的方法（set等）
 如何快速更改echarts主题
+
+
+## vite 中的 import.meta.glob 方法
+- vue3 中使用 require.context 会报错, 可以改用 import.meta.glob 方法
+- 注意glob方法接收的参数必须为不含有任何变量的字符串
+
+## vue3 中的setup 函数是个很特殊的函数，在其中使用await时需要特别注意
+- 如果setup中使用了await后页面无法正常渲染并且控制台中出现如下报错：
+    ```
+    Component <Anonymous>: setup function returned a promise, but no <Suspense> boundary was found in the parent component tree. A component with async setup() must be nested in a <Suspense> in order to be rendered. 
+    at <Index onVnodeUnmounted=fn<onVnodeUnmounted> ref=Ref< undefined > > 
+    at <RouterView> 
+    at <App>
+    ```
+    就说明需要在用await的组件外包裹`<Suspense></Suspense>`标签
+
+## 高德地图webapi
+- 获得地图中点相对于地图容器的位置坐标 ：`map.lngLatToContainer(new AMap.LngLat(lng, lat))`
