@@ -582,3 +582,7 @@ map 的方法（set 等）
   const modules = import.meta.glob('./path/to/files/*.js');
   ```
   上面的代码将会匹配 ./path/to/files/ 目录下所有以 .js 结尾的文件，并返回一个对象 modules，其中包含了每个匹配到的文件路径及其对应的动态导入函数。
+
+
+  ## markdown文档导出方案
+  - 利用typora导出规范的文档
