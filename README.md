@@ -562,7 +562,7 @@ map 的方法（set 等）
 
 - `import.meta` 是 JavaScript 中的一个特殊对象，用于获取关于模块自身的元信息。它包含了一些有用的属性，可以在模块内部使用。
 
-    目前主要有两个属性：
+  目前主要有两个属性：
 
   1. `import.meta.url`：返回当前模块文件的 URL 地址。
   2. `import.meta.env`：返回一个对象，包含了当前环境的一些信息，比如 `MODE`、`BASE_URL` 等。
@@ -571,18 +571,65 @@ map 的方法（set 等）
 
   以下是一个示例：
 
-    ```javascript
-    console.log(import.meta.url); // 返回当前模块文件的 URL 地址
-    console.log(import.meta.env.MODE); // 返回当前环境的模式（development、production 等）
-    console.log(import.meta.env.BASE_URL); // 返回当前环境的基础 URL
-    ```
+  ```javascript
+  console.log(import.meta.url); // 返回当前模块文件的 URL 地址
+  console.log(import.meta.env.MODE); // 返回当前环境的模式（development、production 等）
+  console.log(import.meta.env.BASE_URL); // 返回当前环境的基础 URL
+  ```
+
 - `import.meta.glob` 是 Vite 中的一个特殊语法，用于匹配指定目录下的文件，并返回一个对象，该对象的键是匹配到的文件路径，值是一个函数，调用这个函数可以动态导入对应的模块。
   这个语法的基本用法是：
+
   ```javascript
-  const modules = import.meta.glob('./path/to/files/*.js');
+  const modules = import.meta.glob("./path/to/files/*.js");
   ```
+
   上面的代码将会匹配 ./path/to/files/ 目录下所有以 .js 结尾的文件，并返回一个对象 modules，其中包含了每个匹配到的文件路径及其对应的动态导入函数。
 
+## markdown 文档导出方案
 
-  ## markdown文档导出方案
-  - 利用typora导出规范的文档
+- 利用 typora 导出规范的文档
+
+## css3 新特性
+
+- Flexbox 布局
+- Grid 布局 `display: grid`
+- 多列布局
+  ```javascript
+  .column {
+    column-count: 3; /* 三列 */
+    column-gap: 20px; /* 列间距 */
+  }
+  ```
+- CSS 变量
+
+  ```css
+  :root {
+    --main-color: #3498db;
+  }
+
+  .element {
+    color: var(--main-color);
+  }
+  ```
+
+- 变换 (Transform)
+- 动画 (Animations)
+- 过渡 (Transitions)
+- 伪类和伪元素
+- 媒体查询 (Media Queries)
+  ```css
+  @media (max-width: 600px) {
+    .container {
+      flex-direction: column; /_ 在小屏幕上纵向排列 _/
+    }
+  }
+  ```
+- 文字效果
+
+  ```css
+  .element {
+    text-shadow: 2px 2px 5px grey; /* 文字阴影 */
+    font-family: "Open Sans", sans-serif; /* 自定义字体 */
+  }
+  ```
