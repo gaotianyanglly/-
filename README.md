@@ -634,3 +634,5 @@ map 的方法（set 等）
     font-family: "Open Sans", sans-serif; /* 自定义字体 */
   }
   ```
+##vue2按需引入模组解决网页白屏问题
+  - @babel/plugin-syntax-dynamic-import
